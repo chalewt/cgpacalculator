@@ -122,6 +122,7 @@ public class MainUI extends javax.swing.JFrame {
 
         txtTotalGp.setEditable(false);
         txtTotalGp.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtTotalGp.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         jLabel5.setText("Total Credit");
 
@@ -129,9 +130,11 @@ public class MainUI extends javax.swing.JFrame {
 
         txtTotalCredit.setEditable(false);
         txtTotalCredit.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtTotalCredit.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         txtCgpa.setEditable(false);
         txtCgpa.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtCgpa.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         jLabel7.setText("CGPA");
 
@@ -231,13 +234,26 @@ public class MainUI extends javax.swing.JFrame {
 
     private void btnCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateActionPerformed
         // TODO add your handling code here:
-
+        if (tblCourseList.getRowCount() <= 0) {
+            return;
+        }
+        double totalGp = 0, cgpa;
+        int totalCredit = 0;
+        DefaultTableModel courseList = (DefaultTableModel) tblCourseList.getModel();
+        for (int i = 0; i < tblCourseList.getRowCount(); i++) {
+            totalCredit += Integer.parseInt(courseList.getValueAt(i, 3).toString());
+            totalGp += Double.parseDouble(courseList.getValueAt(i, 5).toString());
+        }
+        cgpa = Math.round((totalGp / totalCredit) * 1000) / 1000D;
+        txtTotalCredit.setText(Integer.toString(totalCredit));
+        txtTotalGp.setText(Double.toString(totalGp));
+        txtCgpa.setText(Double.toString(cgpa));
     }//GEN-LAST:event_btnCalculateActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
-        if ("".equals(txtTitle.getText())) {
-            JOptionPane.showMessageDialog(this, "enter required fields.", "Input", JOptionPane.WARNING_MESSAGE);
+        if ("".equals(txtTitle.getText()) || "".equals(txtCredit.getText())) {
+            JOptionPane.showMessageDialog(this, "Please, enter required fields.", "Input", JOptionPane.WARNING_MESSAGE);
             return;
         }
         GradeReport gradeReport = new GradeReport();
